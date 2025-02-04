@@ -8,7 +8,7 @@ class BD {
     public static function conn() {
         if (is_null(self::$conn)) {
             try {
-                self::$conn = new PDO('mysql:host=localhost;port=3307;dbname=imoveis;', 'root', '');
+                self::$conn = new PDO('mysql:host=localhost;port=3306;dbname=imoveis;', 'root', '');
                 self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  // Modo de erro configurado para exceções
             } catch (PDOException $e) {
                 // Exibe a mensagem de erro e encerra o script
