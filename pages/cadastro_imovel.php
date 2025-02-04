@@ -10,8 +10,8 @@ if (!getPermissaoUsuario('imoveis', $permissoes, $grupoUsuario, 'CadImoveis')) {
                 location.href = "' . $base . '";
             });
         </script>';
-    exit;
-}
+        exit;
+    }
 
 $cad = new Cadastro();
 

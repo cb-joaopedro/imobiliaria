@@ -5,7 +5,7 @@ class Cadastro extends BD {
     private $numRows;
 
     // Construtor único para definir a tabela
-    public function __construct($tabela = 'USUARIO') {
+    public function __construct($tabela = 'usuario') {
         $this->table = $tabela;
         $this->numRows = 0;
     }
@@ -72,7 +72,7 @@ class Cadastro extends BD {
     
 
     public function getUsuarioCd($cd) {
-        $sql = "SELECT * FROM USUARIO WHERE CD_USUARIO = :cd";
+        $sql = "SELECT * FROM usuario WHERE CD_USUARIO = :cd";
         try {
             $stmt = self::conn()->prepare($sql);
             $stmt->bindValue(':cd', $cd, PDO::PARAM_INT);
@@ -101,7 +101,7 @@ class Cadastro extends BD {
     }
 
     public function novoUsuario($dados = []) {
-        $sql = "INSERT INTO USUARIO (USUARIO, NOME, GRUPO, SENHA) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO usuario (USUARIO, NOME, GRUPO, SENHA) VALUES (?, ?, ?, ?)";
         try {
             $stmt = self::conn()->prepare($sql);
             return $stmt->execute($dados);
@@ -141,7 +141,7 @@ class Cadastro extends BD {
 
     public function getImovelCd($cd_imovel) {
         try {
-            $sql = "SELECT * FROM IMOVEL WHERE CD_IMOVEL = :cd_imovel";
+            $sql = "SELECT * FROM imovel WHERE CD_IMOVEL = :cd_imovel";
             $stmt = BD::conn()->prepare($sql);
             $stmt->bindParam(':cd_imovel', $cd_imovel, PDO::PARAM_INT);
             $stmt->execute();
@@ -159,7 +159,7 @@ class Cadastro extends BD {
             throw new Exception('O número de dados não corresponde aos parâmetros esperados.');
         }
 
-        $sql = "INSERT INTO IMOVEL (DESCRICAO, LOCALIZACAO, VALOR, SITUACAO) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO imovel (DESCRICAO, LOCALIZACAO, VALOR, SITUACAO) VALUES (?, ?, ?, ?)";
         try {
             $stmt = self::conn()->prepare($sql);
             if ($stmt->execute($dados)) {
@@ -182,7 +182,7 @@ class Cadastro extends BD {
         }
     
         // A situação será atualizada apenas se houver um valor novo para ela
-        $sql = "UPDATE IMOVEL SET DESCRICAO = ?, LOCALIZACAO = ?, VALOR = ?, SITUACAO = IFNULL(?, SITUACAO) WHERE CD_IMOVEL = ?";
+        $sql = "UPDATE imovel SET DESCRICAO = ?, LOCALIZACAO = ?, VALOR = ?, SITUACAO = IFNULL(?, SITUACAO) WHERE CD_IMOVEL = ?";
         
         try {
             $stmt = self::conn()->prepare($sql);
@@ -248,7 +248,7 @@ class Cadastro extends BD {
     
 
     public function getTotalImoveisDisponiveis() {
-        $sql = "SELECT COUNT(CD_IMOVEL) AS QTDE FROM IMOVEL WHERE SITUACAO = 1"; // Situação 1 = Disponivel
+        $sql = "SELECT COUNT(CD_IMOVEL) AS QTDE FROM imovel WHERE SITUACAO = 1"; // Situação 1 = Disponivel
         try {
             $stmt = self::conn()->query($sql);
             return $stmt->fetchObject();
@@ -260,7 +260,7 @@ class Cadastro extends BD {
 
 
     public function getTotalImoveisReservados() {
-        $sql = "SELECT COUNT(CD_IMOVEL) AS QTDE FROM IMOVEL WHERE SITUACAO = 3"; // Situação 3 = Reservado
+        $sql = "SELECT COUNT(CD_IMOVEL) AS QTDE FROM imovel WHERE SITUACAO = 3"; // Situação 3 = Reservado
         try {
             $stmt = self::conn()->query($sql);
             return $stmt->fetchObject();
@@ -271,7 +271,7 @@ class Cadastro extends BD {
     }
 
     public function getTotalImoveisVendidos() {
-        $sql = "SELECT COUNT(CD_IMOVEL) AS QTDE FROM IMOVEL WHERE SITUACAO = 2"; // Situação 2 = Vendido
+        $sql = "SELECT COUNT(CD_IMOVEL) AS QTDE FROM imovel WHERE SITUACAO = 2"; // Situação 2 = Vendido
         try {
             $stmt = self::conn()->query($sql);
             return $stmt->fetchObject();
@@ -284,7 +284,7 @@ class Cadastro extends BD {
 
     public function getValorImoveisVendidos() {
         $situacao = 2; // Código para 'Vendido'
-        $sql = "SELECT SUM(VALOR) AS total_vendido FROM IMOVEL WHERE SITUACAO = :situacao";
+        $sql = "SELECT SUM(VALOR) AS total_vendido FROM imovel WHERE SITUACAO = :situacao";
         try {
             $stmt = self::conn()->prepare($sql);
             $stmt->bindParam(':situacao', $situacao, PDO::PARAM_INT);
@@ -299,7 +299,7 @@ class Cadastro extends BD {
     }
 
     public function venderImovel($id_imovel) {
-        $sql = "UPDATE IMOVEL SET SITUACAO = 2 WHERE CD_IMOVEL = ?";
+        $sql = "UPDATE imovel SET SITUACAO = 2 WHERE CD_IMOVEL = ?";
         try {
             $stmt = self::conn()->prepare($sql);
             $stmt->bindParam(1, $id_imovel, PDO::PARAM_INT);
@@ -311,7 +311,7 @@ class Cadastro extends BD {
     }
 
     public function reservarImovel($id_imovel) {
-        $sql = "UPDATE IMOVEL SET SITUACAO = 3 WHERE CD_IMOVEL = ?";
+        $sql = "UPDATE imovel SET SITUACAO = 3 WHERE CD_IMOVEL = ?";
         try {
             $stmt = self::conn()->prepare($sql);
             $stmt->bindParam(1, $id_imovel, PDO::PARAM_INT);
@@ -325,7 +325,7 @@ class Cadastro extends BD {
     public function vincularCompraImovel($id_imovel, $id_cliente) {
         // SQL para atualizar o imóvel, associando o cliente comprador
         $dt_venda = date('Y/m/d H:i:s');
-        $sql = "UPDATE IMOVEL SET SITUACAO = 2, DT_VENDA='$dt_venda', CD_CLIENTE = ? WHERE CD_IMOVEL = ?";
+        $sql = "UPDATE imovel SET SITUACAO = 2, DT_VENDA='$dt_venda', CD_CLIENTE = ? WHERE CD_IMOVEL = ?";
         
         try {
             // Prepara a query
@@ -370,7 +370,7 @@ class Cadastro extends BD {
 
 
     public function getClientePorId($cd_cliente) {
-        $sql = "SELECT NOME FROM CLIENTES WHERE CD_CLIENTE = :cd_cliente";
+        $sql = "SELECT NOME FROM clientes WHERE CD_CLIENTE = :cd_cliente";
         try {
             $stmt = self::conn()->prepare($sql);
             $stmt->bindParam(':cd_cliente', $cd_cliente, PDO::PARAM_INT);
@@ -398,7 +398,7 @@ class Cadastro extends BD {
     }
 
     public function novoCliente($dados = []) {
-        $sql = "INSERT INTO CLIENTES (NOME, CPF, TELEFONE) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO clientes (NOME, CPF, TELEFONE) VALUES (?, ?, ?)";
         try {
             $stmt = self::conn()->prepare($sql);
             return $stmt->execute($dados);
@@ -409,7 +409,7 @@ class Cadastro extends BD {
     }
 
     public function editarCliente($dados = []) {
-        $sql = "UPDATE CLIENTES SET NOME = ?, CPF = ?, TELEFONE = ? WHERE CD_CLIENTE = ?";
+        $sql = "UPDATE clientes SET NOME = ?, CPF = ?, TELEFONE = ? WHERE CD_CLIENTE = ?";
         try {
             $stmt = self::conn()->prepare($sql);
             return $stmt->execute($dados);
@@ -420,7 +420,7 @@ class Cadastro extends BD {
     }
 
     public function getClienteCd($cd) {
-        $sql = "SELECT * FROM CLIENTES WHERE CD_CLIENTE = :cd";
+        $sql = "SELECT * FROM clientes WHERE CD_CLIENTE = :cd";
         try {
             $stmt = self::conn()->prepare($sql);
             $stmt->bindValue(':cd', $cd, PDO::PARAM_INT);

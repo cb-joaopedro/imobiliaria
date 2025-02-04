@@ -11,25 +11,25 @@ if (isset($cd) && isset($acao)) {
         switch ($acao) {
             case 1:
                 // Excluir usuário
-                $sql = "DELETE FROM `USUARIO` WHERE CD_USUARIO = :cd";
+                $sql = "DELETE FROM `usuario` WHERE CD_USUARIO = :cd";
                 $redirect = $base . '/usuarios';
                 break;
 
             case 2:
                 // Excluir imóvel
-                $sql = "DELETE FROM `IMOVEL` WHERE CD_IMOVEL = :cd";
+                $sql = "DELETE FROM `imovel` WHERE CD_IMOVEL = :cd";
                 $redirect = $base . '/imoveis';
                 break;
 
             case 3:
                 // Excluir cliente
-                $sql = "DELETE FROM `CLIENTES` WHERE CD_CLIENTE = :cd";
+                $sql = "DELETE FROM `clientes` WHERE CD_CLIENTE = :cd";
                 $redirect = $base . '/clientes';
                 break;
 
             case 4:
                 // Reservar imóvel
-                $sql = "UPDATE `IMOVEL` SET SITUACAO = 3 WHERE CD_IMOVEL = :cd";
+                $sql = "UPDATE `imovel` SET SITUACAO = 3 WHERE CD_IMOVEL = :cd";
                 $redirect = $base . '/imoveis';
                 break;
 
